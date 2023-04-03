@@ -110,27 +110,64 @@ perguntas = [{"PERGUNTA" : "GOSTO DE ESTAR SOZINHO PARA REFLETIR SOBRE MEUS PENS
              {"PERGUNTA" : "TENHO FACILIDADE PARA ENTENDER PADRÕES, RELAÇÕES E CONEXÕES EM DIFERENTES CONTEXTOS, SEJA NA MATEMÁTICA OU EM OUTRAS ÁREAS"}
              ]
 
+def cabecalho():
+    tam = 133
+    txt1 = 'Bem vindo ao sistema de Avaliação das Múltiplas Inteligências'
+    txt2 = 'Esse teste é baseado na teoria do psicólogo Howard Gardner'
+    print('~' * tam)
+    print('\033[44m|' + f'{txt1:^{tam - 2}}|'+'\033[0;0m')
+    print('~' * tam)
+    print('\033[44m|' + f'{txt2:^{tam - 2}}|'+'\033[0;0m')
+    aviso()
+
+def aviso():
+    tam = 133
+    txt = 'Lembrando que este teste servirá apenas como base para orientar sobre quais inteligências o usuário tem maior compatibilidade'
+    print('~' * tam)
+    print('\033[31m' + '\033[47m|' +  f'{txt:^{tam - 2}}|'+'\033[0;0m')
+    print('~' * tam)
+    print()
+    txt = 'A seguir você deverá escrever de 0 a 5 o quanto você concorda com cada frase'
+    print(f'|{txt:^{tam - 2}}|')
+    print()
+
 #ZERAR VALORES DE OCORRÊNCIAS
 for i in BD:
       i["OCORRENCIAS"]=0
       i["PERCENTUAL"]=0
   
+    
+cabecalho()
+
 for pos2, i2 in enumerate(perguntas):
-    print("-=" * 60)
+    print("~" * 133)
+    contador = f'Questão {pos2 + 1}'
+    print(f'|{contador:^{131}}|')
     caracteristica = i2["PERGUNTA"]
-    print(caracteristica)
-    nivel = int(input("0/5: "))
+    print(f'|{caracteristica:^{133 - 2}}|')
+    
+    while True:
+        try:
+            nivel = int(input("O quanto você concorda com essa frase? (0/5): "))
+            if 0 <= nivel <= 5:
+                break
+            print("Valor deve estar entre 0 e 5")
+        except ValueError:
+            print("Digite apenas valores inteiros")
+        
+    print("~" * 133)
     for pos,i in enumerate(BD):
         inteligencia=i["INTELIGENCIA"]
         caracteristicas=i["CARACTERISTICAS"]
         if (caracteristica in caracteristicas):
             i["OCORRENCIAS"]+=caracteristicas[caracteristica] * nivel
-            print("A CARACTERISTICA: ",caracteristica," É CARACTERÍSTICA DA INTELIGENCIA: ",inteligencia, "\nPESO ATUAL: ", i["OCORRENCIAS"], "\n")
-        
-        
-print("\nPONDERACOES")
-for i in BD:
-    print("\nINTELIGENCIA: ", i["INTELIGENCIA"], "OCORRENCIAS: ", i["OCORRENCIAS"])
+            print('Essa característica é referente à inteligência ' + '\033[32m' + inteligencia + '\033[0;0m')
+print("~" * 133)        
+ 
+#Apenas utilizado para testar as somas e conferir os resultados
+#print("\nPONDERACOES")
+#for i in BD:
+#    print("\nINTELIGENCIA: ", i["INTELIGENCIA"], "OCORRENCIAS: ", i["OCORRENCIAS"])
     
 #TOTALIZAR PESOS
 for i in BD:
@@ -146,14 +183,17 @@ for i in BD:
 BD_ordenado = sorted(BD, key=lambda x: x["PERCENTUAL"], reverse=True)
 
 # Mostrando os três maiores valores que correspondem suas possíveis inteligências
-print("\n\nSeus resultados.")
+txt1 = 'Seus resultados'
+print()
+print('\033[44m|' + f'{txt1:^{131}}|'+'\033[0;0m')
+print()
 for i in range(3):
-    print("-=" * 60)
-    print(BD_ordenado[i]["INTELIGENCIA"], ": %", format(BD_ordenado[i]["PERCENTUAL"], ".2f"))
+    print("~" * 133)     
+    print('\033[32m' + BD_ordenado[i]["INTELIGENCIA"] + '\033[0;0m', ": %", format(BD_ordenado[i]["PERCENTUAL"], ".2f"))
     print("Informações sobre a inteligência:")
     print("Melhor forma de aprendizado: ", BD_ordenado[i]["APRENDIZADO"])
     print("Melhores profissões: ", BD_ordenado[i]["PROFISSOES"])
-print("-=" * 60)
+print("~" * 133) 
     
     
 
